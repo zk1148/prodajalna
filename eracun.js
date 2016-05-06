@@ -146,6 +146,17 @@ var strankaIzRacuna = function(racunId, callback) {
     })
 }
 
+// Vrni podrobnosti o trenutni stranki
+var strankaTrenutna = function(strankaId, callback) {
+    pb.all("SELECT Customer.* FROM Customer \
+          WHERE Customer.CustomerId = " + strankaId,
+      function(napaka, vrstice) {
+        callback(napaka, vrstice);
+     });
+}
+
+
+
 // Izpis računa v HTML predstavitvi na podlagi podatkov iz baze
 streznik.post('/izpisiRacunBaza', function(zahteva, odgovor) {
   odgovor.end();
@@ -163,7 +174,9 @@ streznik.get('/izpisiRacun/:oblika', function(zahteva, odgovor) {
       odgovor.setHeader('content-type', 'text/xml');
       odgovor.render('eslog', {
         vizualiziraj: zahteva.params.oblika == 'html' ? true : false,
-        postavkeRacuna: pesmi
+        postavkeRacuna: pesmi,
+        stranka: stranka
+        
       })  
     }
   })
